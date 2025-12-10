@@ -7,3 +7,18 @@ services:
     volumes:
       - ./index.html:/usr/share/nginx/html/index.html
     restart: always
+
+  
+  db:
+    image: mariadb:10.6
+    container_name: my-db
+    restart: always
+    environment:
+      MARIADB_ROOT_PASSWORD: password123
+      MARIADB_DATABASE: usuarios_app
+    volumes: 
+      - mis-datos-mysql:/var/lib/mysql
+
+
+volumes:
+ mis-datos-mysql:
