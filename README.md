@@ -14,6 +14,6 @@ The project consists of orchestrated services and automation layers:
 1.  **Frontend (Web):** Nginx server (lightweight Alpine version) configured with *Bind Mounts* for real-time code editing.
 2.  **Backend (DB):** MariaDB 10.6 database with persistent volumes (`mysql-data`).
 3.  **Network:** Both services communicate within an isolated internal network.
-4.  **Ansible:** Automation engine acting as the deployment controller. It manages the directory structure (`/opt/my-awesome-app`), handles file provisioning, and executes the Docker Compose logic through a declarative Playbook.
+4.  **Ansible:** Automation engine acting as the deployment controller. It manages the directory structure (`/opt/my_test_server`), handles file provisioning, and executes the Docker Compose logic through a declarative Playbook.
 
 #

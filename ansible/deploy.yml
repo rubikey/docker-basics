@@ -5,7 +5,7 @@
 
   # VARIABLES: Here we define configuration outside the logic
   vars:
-    project_root: /opt/my-awesome-app
+    project_root: /opt/my_test_server
     source_dir: ../app/
     # This copies everything inside app/ to /opt/my-awesome-app
   
