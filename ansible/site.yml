@@ -1,0 +1,10 @@
+---
+- name: Master Playbook for my infrastructure
+  hosts: local_servers
+  become: yes
+
+
+  roles:
+    - web_server_deploy
+
+  

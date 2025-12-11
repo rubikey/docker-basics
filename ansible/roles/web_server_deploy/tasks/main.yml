@@ -1,0 +1,27 @@
+---
+# tasks file for web_server_deploy
+
+- name: Ensure project directory exists
+  file:
+    path: "{{ project_root }}"
+    state: directory
+    mode: '0755'
+
+- name: Copy application files to server
+  copy:
+    src: "{{ source_dir }}"
+    dest: "{{ project_root }}/"
+
+- name: Start containers using Docker Compose
+  shell: docker compose up -d --build
+  args:
+    chdir: "{{ project_root }}"
+
+- name: Verify service is running
+  shell: docker ps | grep web-server
+  register: docker_status
+  ignore_errors: yes
+
+- name: Print status
+  debug:
+    msg: "Deployment finished! Container status: {{ docker_status.stdout }}"
