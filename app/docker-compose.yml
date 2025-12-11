@@ -1,7 +1,7 @@
 services:
   app-web:
     build: .          # Dockerfile Path
-    container_name: servidor-web
+    container_name: web-server
     ports:
       - "8080:80"
     volumes:
@@ -11,14 +11,14 @@ services:
   
   db:
     image: mariadb:10.6
-    container_name: my-db
+    container_name: db-server
     restart: always
     environment:
       MARIADB_ROOT_PASSWORD: password123
       MARIADB_DATABASE: usuarios_app
     volumes: 
-      - mis-datos-mysql:/var/lib/mysql
+      - mysql-data:/var/lib/mysql
 
 
 volumes:
- mis-datos-mysql:
+ mysql-data:

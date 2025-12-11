@@ -1,0 +1,39 @@
+---
+- name: Deploy Dockerized Web Application
+  hosts: local_servers
+  become: yes
+
+  # VARIABLES: Here we define configuration outside the logic
+  vars:
+    project_root: /opt/my-awesome-app
+    source_dir: ../app/
+    # This copies everything inside app/ to /opt/my-awesome-app
+  
+  tasks:
+    - name: Ensure project directory exists
+      file:
+        path: "{{ project_root }}"
+        state: directory
+        mode: '0755'
+
+    - name: Copy application files to server
+      copy:
+        src: "{{ source_dir }}"
+        dest: "{{ project_root }}/"
+
+
+
+    - name: Start containers using Docker Compose
+      shell: docker compose up -d --build
+      args:
+        chdir: "{{ project_root }}" # Execute command inside the project folder
+
+    - name: Verify service is running
+      shell: docker ps | grep web-server
+      register: docker_status # We save the output into a variable
+      ignore_errors: yes
+
+    - name: Print status
+      debug:
+        msg: "Deployment finished! Container status: {{ docker_status.stdout }}"
+
