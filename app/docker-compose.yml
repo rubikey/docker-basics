@@ -1,12 +1,24 @@
 services:
+  proxy:
+    image: 'jc21/nging-proxy-manager:latest'
+    container_name: proxy-manager
+    restart: unless-stopped
+    ports:
+      - '80:80' # Entrada HTTP estándar
+      - '81:81' # Panel de administración del Proxy
+      - '443:443' # Entrada HTTPS
+    volumes:
+      - ./data:/data
+      - ./letsencrypt:/etc/letsencrypt
+
+
   app-web:
     build: .          # Dockerfile Path
     container_name: web-server
-    ports:
-      - "8080:80"
+    restart: always
     volumes:
       - ./index.html:/usr/share/nginx/html/index.html
-    restart: always
+    
 
   
   db:
@@ -15,7 +27,7 @@ services:
     restart: always
     environment:
       MARIADB_ROOT_PASSWORD: password123
-      MARIADB_DATABASE: usuarios_app
+      MARIADB_DATABASE: app_users
     volumes: 
       - mysql-data:/var/lib/mysql
 
