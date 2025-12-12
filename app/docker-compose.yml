@@ -30,7 +30,7 @@ services:
       MARIADB_DATABASE: app_users
     volumes: 
       - mysql-data:/var/lib/mysql
-
+ 
 
 volumes:
  mysql-data:
