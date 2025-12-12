@@ -2,18 +2,22 @@
 
 ![Docker](https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white)
 ![MariaDB](https://img.shields.io/badge/MariaDB-003545?style=for-the-badge&logo=mariadb&logoColor=white)
-![Nginx](https://img.shields.io/badge/Nginx-009639?style=for-the-badge&logo=nginx&logoColor=white)
+![Nginx Proxy Manager](https://img.shields.io/badge/Nginx_Proxy_Manager-F15833?style=for-the-badge&logo=nginx&logoColor=white)
 ![Ansible](https://img.shields.io/badge/Ansible-EE0000?style=for-the-badge&logo=ansible&logoColor=white)
+![GitHub Actions](https://img.shields.io/badge/GitHub_Actions-2088FF?style=for-the-badge&logo=github-actions&logoColor=white)
 
-This project deploys a complete and automated infrastructure stack using **Docker Compose** and **Ansible**. It simulates a basic production environment featuring a frontend web server and a backend database with guaranteed data persistence, orchestrated via Infrastructure as Code (IaC).
+This project deploys a full-stack, automated infrastructure using **Docker Compose**, **Ansible**, and **GitHub Actions**. It features a self-healing architecture with a Reverse Proxy gateway, automated deployments via Self-Hosted Runners, and persistent data storage.
 
-## 🏗 Architecture
+## 🏗 Architecture & Stack
 
-The project consists of orchestrated services and automation layers:
+The infrastructure is composed of 4 main layers:
 
-1.  **Frontend (Web):** Nginx server (lightweight Alpine version) configured with *Bind Mounts* for real-time code editing.
-2.  **Backend (DB):** MariaDB 10.6 database with persistent volumes (`mysql-data`).
-3.  **Network:** Both services communicate within an isolated internal network.
-4.  **Ansible:** Automation engine acting as the deployment controller. It manages the directory structure (`/opt/my_test_server`), handles file provisioning, and executes the Docker Compose logic through a declarative Playbook.
+1.  **Gateway (Reverse Proxy):** **Nginx Proxy Manager** listening on ports `80/443`. It handles domain resolution (`mi-app.local`), SSL termination, and routes traffic to internal containers.
+2.  **Application (Web):** Nginx server (Alpine) serving static content. It is **not exposed** to the public directly; it sits behind the proxy.
+3.  **Data (Backend):** MariaDB 10.6 database with persistent volumes (`mysql-data`).
+4.  **Automation (CI/CD):**
+    * **Ansible:** Manages the configuration state and idempotency.
+    * **GitHub Actions:** A Self-Hosted Runner on the target machine detects commits and triggers Ansible automatically.
 
-#
+
+#### Author: rubikey

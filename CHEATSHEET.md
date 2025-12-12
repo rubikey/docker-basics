@@ -165,3 +165,27 @@ community.docker.docker_compose:
     build: yes
 
 ```
+
+
+```markdown
+---
+
+### 🛡️ PARTE 6: NGINX PROXY MANAGER (Reverse Proxy)
+
+Gestión del contenedor `jc21/nginx-proxy-manager`.
+
+### 🔑 Credenciales por Defecto
+* **User:** `admin@example.com`
+* **Pass:** `changeme`
+
+### ⚙️ Configuración en Docker Compose
+```yaml
+  proxy:
+    image: 'jc21/nginx-proxy-manager:latest'
+    ports:
+      - '80:80'    # HTTP Tráfico web
+      - '81:81'    # GUI de Administración
+      - '443:443'  # HTTPS Tráfico seguro
+    volumes:
+      - ./data:/data
+      - ./letsencrypt:/etc/letsencrypt
