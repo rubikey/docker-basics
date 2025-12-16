@@ -1,73 +1,73 @@
 # 📘 CHEATSHEET DEVOPS: DOCKER & ANSIBLE
 
-Este documento es una referencia rápida para SysAdmins sobre comandos y módulos esenciales.
+This document is a fast reference for SysAdmins about commands and essential modules.
 
 ---
 
-## 🐳 PARTE 1: DOCKER CLI (Comandos de Terminal)
+## 🐳 PART 1: DOCKER CLI (Terminal commands)
 
-Comandos para gestionar contenedores e imágenes manualmente.
+Manual container and image management.
 
-### 🟢 Ciclo de Vida del Contenedor
+### 🟢 Container Lifecycle
 ```bash
-docker run -d -p 80:80 nginx   # Descarga, crea y arranca en 2º plano
-docker ps                      # Muestra contenedores CORRIENDO
-docker ps -a                   # Muestra TODOS (incluidos apagados)
-docker stop <nombre>           # Detiene un contenedor
-docker start <nombre>          # Enciende un contenedor apagado
-docker restart <nombre>        # Reinicio rápido
-docker rm <nombre>             # Borra un contenedor (debe estar detenido)
-docker rm -f <nombre>          # Fuerza el borrado inmediato
+docker run -d -p 80:80 nginx   # Pull, create and start in the background
+docker ps                      # Show Running containers
+docker ps -a                   # Show all containers (Including stopped)
+docker stop <name>             # Stop a container
+docker start <name>            # Start a stopped container
+docker restart <name>          # Fast restart
+docker rm <name>               # Delete container (Must be stopped)
+docker rm -f <name>            # Force delete
 
-### 📦 Gestión de Imágenes
-docker images                  # Lista imágenes descargadas
-docker pull <imagen>:<tag>     # Descarga sin correr (ej: ubuntu:24.04)
-docker rmi <imagen>            # Borra una imagen del disco
-docker build -t <nombre> .     # Construye imagen desde Dockerfile actual
+### 📦 Image Management
+docker images                  # List pulled images
+docker pull <image>:<tag>      # Pull without run (ex: ubuntu:24.04)
+docker rmi <image>             # Delete image from disk
+docker build -t <name> .       # Build image from current Dockerfile
 
-### 🕵️ Debugging y Mantenimiento
-docker logs <nombre>           # Muestra logs internos
-docker logs -f <nombre>        # Logs en vivo (como tail -f)
-docker exec -it <nombre> sh    # Entrar dentro del contenedor (terminal)
-docker inspect <nombre>        # Ver metadata (IP, volúmenes) en JSON
-docker stats                   # Ver consumo CPU/RAM en vivo
-docker system prune -a         # ¡PELIGRO! Limpieza total (libera espacio)
+### 🕵️ Debugging and Maintenance
+docker logs <name>           # Show internal logs
+docker logs -f <name>        # Show running logs (like 'tail -f')
+docker exec -it <name> sh    # Enter into container (terminal)
+docker inspect <name>        # Show metadata (IP, volumes) in JSON
+docker stats                 # Show live CPU/RAM usage
+docker system prune -a       # System cleanup (Dangerous!)
 ```
 ---
 
-### 🏗️ PARTE 2: DOCKERFILE
+### 🏗️ PART 2: DOCKERFILE
 
-Instrucciones para crear imágenes personalizadas.
+Instructions to create custom images.
 
-| **FROM** | Imagen base (Obligatorio). | `FROM python:3.9-alpine` |
+| **FROM** | Base image (Obligatory) | `FROM python:3.9-alpine` |
 
-| **WORKDIR** | Crea y entra a carpeta interna. | `WORKDIR /app` |
+| **WORKDIR** | Create and enter the directory | `WORKDIR /app` |
 
-| **COPY** | Copia archivos de tu PC al contenedor. | `COPY . .` |
+| **COPY** | Copy files from local PC to container | `COPY . .` |
 
-| **RUN** | Ejecuta comandos durante la construcción. | `RUN apt-get update` |
+| **RUN** | Execute commands during the build | `RUN apt-get update` |
 
-| **ENV** | Define variables de entorno. | `ENV PORT=8080` |
+| **ENV** | Define environment variable | `ENV PORT=8080` |
 
-| **EXPOSE** | Documenta el puerto de escucha. | `EXPOSE 80` |
+| **EXPOSE** | Documents the listening port | `EXPOSE 80` |
 
-| **CMD** | Comando de arranque por defecto. | `CMD ["python", "app.py"]` |
+| **CMD** | Default running command | `CMD ["python", "app.py"]` |
 
 ---
 
-### 🐙 PARTE 3: DOCKER COMPOSE (La Orquestación)
+### 🐙 PART 3: DOCKER COMPOSE (Orchestration)
 
-Estructura básica de `docker-compose.yml`.
+Basic structure of `docker-compose.yml`.
 
 ```yaml
 version: "3.8"
 
 services:
-  mi-app:
+  my-app:
     container_name: web-server
-    build: .                  # Construir desde Dockerfile local
+    build: .                  # Build from local Dockerfile
     ports:
-      - "8080:80"             # Host:Contenedor
+      - "8080:80"             # Host:Container
     environment:
       - MODO=produccion
     volumes:
@@ -80,7 +80,7 @@ services:
     environment:
       MARIADB_ROOT_PASSWORD: secret
     volumes:
-      - data-db:/var/lib/mysql        # Volumen Persistente
+      - data-db:/var/lib/mysql        # Persistent Volume
 
 volumes:
   data-db: {}
@@ -89,103 +89,102 @@ volumes:
 
 
 
-### 🤖 PARTE 4: ANSIBLE CLI
-Comandos para ejecutar automatizaciones.
+### 🤖 PART 4: ANSIBLE CLI
+Commands to execute the automation.
 
 ```bash
-# Prueba de conexión (Ping) a todos los servidores
+# Connection test (Ping) to all servers
 ansible all -m ping -i inventory.ini
 
-# Ejecutar un Playbook completo
+# Execute a playbook using inventory
 ansible-playbook -i inventory.ini deploy.yml
 
-# Revisar errores de sintaxis antes de ejecutar
+# Review syntax errors before execution
 ansible-playbook --syntax-check deploy.yml
 
-# Crear estructura de carpetas para un nuevo Role
-ansible-galaxy init <nombre_del_rol>
+# Create directory structure for a new Ansible Role
+ansible-galaxy init <rol_name>
 ```
 
 
-### 📜 PARTE 5: MÓDULOS DE ANSIBLE
-#### Bloques usados dentro de los Playbooks (tasks:).
+### 📜 PART 5: ANSIBLE MODULES
+#### Blocks used in Playbooks (tasks:).
 
-##### 📂 Archivos
+##### 📂 Files
 
 ```yaml
-- name: Gestión de directorios
+- name: Directory Management
   file:
     path: /opt/mi-app
     state: directory
     mode: '0755'
 
-- name: Copiar archivos estáticos
+- name: Copy static files
   copy:
-    src: ./archivo-local.txt
-    dest: /ruta/remota/archivo.txt
+    src: ./local_file.txt
+    dest: /remote/path/file.txt
 
-- name: Copiar con variables (Plantillas)
+- name: Copy with vars (Jinja2 templates)
   template:
     src: config.j2
     dest: /etc/config.conf
 ```
 
-##### ⚙️ Sistema
+##### ⚙️ System
 
 ```yaml
-- name: Instalar paquetes
+- name: Install packages
   apt:
     name: ['git', 'docker', 'curl']
     state: present
     update_cache: yes
 
-- name: Gestionar servicios
+- name: Manage Services
   service:
     name: docker
     state: started
     enabled: yes
 
-- name: Ejecutar comandos de terminal
+- name: Execute CLI commands
   shell: docker compose up -d
   args:
-    chdir: /opt/mi-app
+    chdir: /opt/my-app
 ```
 
 
 
 
-##### 🐳 Docker (Módulos Community)
+##### 🐳 Docker (Docker Community Modules)
 community.docker.docker_compose:
 
 ```yaml
-- name: Levantar infraestructura
+- name: Deploy infrastructure
   community.docker.docker_compose:
-    project_src: /opt/mi-app
+    project_src: /opt/my-app
     state: present
     build: yes
 
 ```
 
-
-```markdown
 ---
 
-### 🛡️ PARTE 6: NGINX PROXY MANAGER (Reverse Proxy)
+### 🛡️ PART 6: NGINX PROXY MANAGER (Reverse Proxy)
 
-Gestión del contenedor `jc21/nginx-proxy-manager`.
+Container Management `jc21/nginx-proxy-manager`.
 
-### 🔑 Credenciales por Defecto
+#### 🔑 Default Credentials
 * **User:** `admin@example.com`
 * **Pass:** `changeme`
 
-### ⚙️ Configuración en Docker Compose
+#### ⚙️ Docker Compose Configuration
 ```yaml
   proxy:
     image: 'jc21/nginx-proxy-manager:latest'
     ports:
-      - '80:80'    # HTTP Tráfico web
-      - '81:81'    # GUI de Administración
-      - '443:443'  # HTTPS Tráfico seguro
+      - '80:80'    # Web Traffic HTTP
+      - '81:81'    # Administration GUI
+      - '443:443'  # Secure Traffic HTTPS
     volumes:
       - ./data:/data
       - ./letsencrypt:/etc/letsencrypt
+```

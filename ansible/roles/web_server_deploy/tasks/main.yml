@@ -17,7 +17,7 @@
   args:
     chdir: "{{ project_root }}"
 
-- name: Verify service is running
+- name: Verify that service is running
   shell: docker ps | grep web-server
   register: docker_status
   ignore_errors: yes

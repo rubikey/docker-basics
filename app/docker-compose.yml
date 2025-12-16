@@ -4,9 +4,9 @@ services:
     container_name: proxy-manager
     restart: unless-stopped
     ports:
-      - '80:80' # Entrada HTTP estándar
-      - '81:81' # Panel de administración del Proxy
-      - '443:443' # Entrada HTTPS
+      - '80:80' # Standard HTTP
+      - '81:81' # Administration Proxy Manager Panel
+      - '443:443' # HTTPS
     volumes:
       - ./data:/data
       - ./letsencrypt:/etc/letsencrypt
@@ -22,7 +22,7 @@ services:
 
   
   db:
-    image: mariadb:10.6
+    image: mariadb:11.4.9
     container_name: db-server
     restart: always
     environment:

@@ -1,4 +1,4 @@
-name: Despliegue Automático con Ansible
+name: Automatic Deployment with Ansible
 
 # Executes when push the main branch
 on:
@@ -11,11 +11,11 @@ jobs:
     runs-on: self-hosted
 
     steps:
-      - name: Descargar código del repositorio
+      - name: Download repository code
         uses: actions/checkout@v3
 
-      - name: Ejecutar Ansible Playbook
-        # aget running in my host, have access to 'ansible-playbook'
+      - name: Execute Ansible Playbook
+        # It's running in my host, have access to 'ansible-playbook'
         run: |
           cd ansible
           ansible-playbook -i inventory.ini site.yml
