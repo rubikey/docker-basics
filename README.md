@@ -5,6 +5,7 @@
 ![Nginx Proxy Manager](https://img.shields.io/badge/Nginx_Proxy_Manager-F15833?style=for-the-badge&logo=nginx&logoColor=white)
 ![Ansible](https://img.shields.io/badge/Ansible-000000?style=for-the-badge&logo=ansible&logoColor=white)
 ![GitHub Actions](https://img.shields.io/badge/GitHub_Actions-800080?style=for-the-badge&logo=github-actions&logoColor=white)
+![AdGuard](https://img.shields.io/badge/AdGuard-249600?style=for-the-badge&logo=adguard&logoColor=white)
 
 This project deploys a full-stack, automated infrastructure using **Docker Compose**, **Ansible**, and **GitHub Actions**. It features an architecture with a Reverse Proxy gateway, automated deployments via Self-Hosted Runners, and persistent data storage.
 
