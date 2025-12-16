@@ -44,27 +44,22 @@ services:
       - 8888:8080
 
 
-
   backup-db:
-    image: prodrigestivill/mysql-backup-local
+    image: fradelg/mysql-cron-backup
     container_name: utils-db-backup
     restart: unless-stopped
-
     volumes:
-      - ./backups:/backups
-
-    depends_on: 
+      - ./backups:/backup     
+    depends_on:
       - db
-
     environment:
       - MYSQL_HOST=db
       - MYSQL_PORT=3306
       - MYSQL_USER=root
-      - MYSQL_PASSWORD=password123
-      - SCHEDULER_AT=03:00  # time to do backups
-      - BACKUP_KEEP_DAYS=7  # delete old backups (since 7 days)
-      - BACKUP_DIR=/backups
-
+      - MYSQL_PASS=password123
+      - CRON_TIME=0 3 * * * # at 3:00 AM everyday
+      - MAX_BACKUPS=7
+      - INIT_BACKUP=0           
 
 
   # ad-block
