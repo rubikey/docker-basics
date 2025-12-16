@@ -38,32 +38,32 @@ services:
     container_name: utils-dozzle
     restart: unless-stopped
     volumes:
-     - /var/run/docker.sock:/var/run/docker.sock:ro # Allow to read all container logs 
+      - /var/run/docker.sock:/var/run/docker.sock:ro # Allow to read all container logs 
 
     ports:
-     - 8888:8080
+      - 8888:8080
 
 
 
   backup-db:
-    image: prodrigetivill/mysql-backup-local
+    image: prodrigestivill/mysql-backup-local
     container_name: utils-db-backup
     restart: unless-stopped
 
     volumes:
-     - ./backups:/backups
+      - ./backups:/backups
 
     depends_on: 
-     - db-server
+      - db
 
     environment:
-     - MYSQL_HOST=db-server
-     - MYSQL_PORT=3306
-     - MYSQL_USER=root
-     - MYSQL_PASSWORD=password123
-     - SCHEDULER_AT=03:00  # time to do backups
-     - BACKUP_KEEP_DAYS=7  # delete old backups (since 7 days)
-     - BACKUP_DIR=/backups
+      - MYSQL_HOST=db
+      - MYSQL_PORT=3306
+      - MYSQL_USER=root
+      - MYSQL_PASSWORD=password123
+      - SCHEDULER_AT=03:00  # time to do backups
+      - BACKUP_KEEP_DAYS=7  # delete old backups (since 7 days)
+      - BACKUP_DIR=/backups
 
 
 
