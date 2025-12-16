@@ -32,6 +32,7 @@ services:
       - mysql-data:/var/lib/mysql
  
 
+  # Monitoring
   dozzle:
     image: amir20/dozzle:latest
     container_name: utils-dozzle
@@ -41,6 +42,47 @@ services:
 
     ports:
      - 8888:8080
+
+
+
+  backup-db:
+    image: prodrigetivill/mysql-backup-local
+    container_name: utils-db-backup
+    restart: unless-stopped
+
+    volumes:
+     - ./backups:/backups
+
+    depends_on: 
+     - db-server
+
+    environment:
+     - MYSQL_HOST=db-server
+     - MYSQL_PORT=3306
+     - MYSQL_USER=root
+     - MYSQL_PASSWORD=password123
+     - SCHEDULER_AT=03:00  # time to do backups
+     - BACKUP_KEEP_DAYS=7  # delete old backups (since 7 days)
+     - BACKUP_DIR=/backups
+
+
+
+  # ad-block
+  adguard:
+    image: adguard/adguardhome
+    container_name: utils-adguard
+    restart: unless-stopped
+    ports:
+      - "53:53/tcp"   # DNS
+      - "53:53/udp"   # DNS
+      - "3000:3000"   # admin panel (port 3000)
+    volumes:
+      - ./adguard-data:/opt/adguardhome/work
+      - ./adguard-config:/opt/adguardhome/conf
+
+
+
+
 
 volumes:
  mysql-data:
