@@ -70,7 +70,8 @@ services:
     ports:
       - "53:53/tcp"   # DNS
       - "53:53/udp"   # DNS
-      - "3000:3000"   # admin panel (port 3000)
+      - "3000:80/tcp"   # admin panel (port 3000)
+      - "3001:3000/tcp"
     volumes:
       - ./adguard-data:/opt/adguardhome/work
       - ./adguard-config:/opt/adguardhome/conf
